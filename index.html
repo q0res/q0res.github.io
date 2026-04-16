@@ -515,15 +515,28 @@
   const videoGrid = document.getElementById('video-grid');
 
   let isAdmin = false;
+  const ADMIN_KEY = '121212qore121212454566';
 
   adminBtn.addEventListener('click', () => {
     const password = prompt('Enter admin password:');
-    if (password === '121212qore121212454566') {
+    if (password === ADMIN_KEY) {
+      isAdmin = true;
+      localStorage.setItem('adminKey', ADMIN_KEY);
+      uploadSection.style.display = 'block';
+      adminBtn.style.display = 'none';
+      loadVideos(); // Reload videos now that admin is authenticated
+    } else {
+      alert('Incorrect password!');
+    }
+  });
+
+  // Check if admin is already authenticated
+  window.addEventListener('load', () => {
+    const savedAdminKey = localStorage.getItem('adminKey');
+    if (savedAdminKey === ADMIN_KEY) {
       isAdmin = true;
       uploadSection.style.display = 'block';
       adminBtn.style.display = 'none';
-    } else {
-      alert('Incorrect password!');
     }
   });
 
@@ -537,13 +550,17 @@
     try {
       const response = await fetch('/api/videos', {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+          'x-admin-key': ADMIN_KEY
+        }
       });
       if (response.ok) {
         const video = await response.json();
         addVideoToGrid(video, videoGrid);
         addVideoToGrid(video, document.getElementById('gallery-grid'));
         uploadForm.reset();
+        alert('Video uploaded successfully!');
       } else {
         alert('Upload failed!');
       }
@@ -569,21 +586,37 @@
 
   // ── Load videos from API ──
   async function loadVideos() {
+    // Clear existing videos
+    videoGrid.innerHTML = '';
+    document.getElementById('gallery-grid').innerHTML = '';
+    
+    if (!isAdmin) {
+      videoGrid.innerHTML = '<p style="grid-column: 1/-1; color: var(--light-grey); text-align: center;">Videos are only visible to the owner. Please authenticate to view.</p>';
+      return;
+    }
+    
     try {
-      const response = await fetch('/api/videos');
+      const response = await fetch('/api/videos', {
+        headers: {
+          'x-admin-key': ADMIN_KEY
+        }
+      });
       const videos = await response.json();
       const galleryGrid = document.getElementById('gallery-grid');
-      videos.forEach(video => {
-        addVideoToGrid(video, videoGrid);
-        addVideoToGrid(video, galleryGrid);
-      });
+      if (videos.length === 0) {
+        videoGrid.innerHTML = '<p style="grid-column: 1/-1; color: var(--light-grey);">No videos uploaded yet.</p>';
+      } else {
+        videos.forEach(video => {
+          addVideoToGrid(video, videoGrid);
+          addVideoToGrid(video, galleryGrid);
+        });
+      }
     } catch (error) {
       console.error('Failed to load videos:', error);
     }
   }
 
   loadVideos();
-  // For file uploads, we'd need to handle differently, but for demo, this works for URLs
 </script>
 </body>
 </html>
