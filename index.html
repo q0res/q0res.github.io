@@ -63,17 +63,6 @@
     mix-blend-mode: screen;
     box-shadow: 0 0 20px var(--red), 0 0 40px var(--red);
   }
-  #cursor-trail {
-    position: fixed;
-    width: 36px; height: 36px;
-    border: 1.5px solid rgba(255,0,0,0.5);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: left 0.12s ease, top 0.12s ease, width 0.2s, height 0.2s;
-    mix-blend-mode: screen;
-  }
 
   /* ── Sparkles ── */
   .sparkle {
@@ -173,6 +162,52 @@
     display: block;
   }
 
+  /* ── Main text ── */
+  .main-text {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(6rem, 18vw, 15rem);
+    line-height: 0.9;
+    color: transparent;
+    background: linear-gradient(135deg, #fff 0%, var(--red) 40%, var(--dark-red) 70%, #fff 100%);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: gradShift 4s ease infinite, revealText 1.2s cubic-bezier(0.16,1,0.3,1) forwards, pulse 2s ease-in-out infinite alternate;
+    opacity: 0;
+    letter-spacing: -0.03em;
+    text-align: center;
+    filter: drop-shadow(0 0 40px rgba(255,0,0,0.5));
+    position: relative;
+  }
+  .main-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(255,0,0,0.1), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes gradShift {
+    0%,100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  @keyframes revealText {
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to   { transform: scale(1.05); }
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
   /* ── Videos ── */
   .video-grid {
     display: grid;
@@ -255,7 +290,7 @@
   .social-item:hover {
     transform: scale(1.05);
   }
-  .social-item a {
+  .social-item a, .social-item span {
     color: var(--red);
     text-decoration: none;
   }
@@ -268,25 +303,6 @@
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
-  }
-
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-  .gallery-item {
-    background: var(--grey);
-    padding: 1rem;
-    border-radius: 8px;
-    transition: transform 0.3s;
-  }
-  .gallery-item:hover {
-    transform: translateY(-5px);
-  }
-  .gallery-item img {
-    width: 100%;
-    border-radius: 4px;
   }
 
   /* ── Orbiting ring ── */
@@ -333,7 +349,6 @@
 
 <!-- Custom cursor -->
 <div id="cursor"></div>
-<div id="cursor-trail"></div>
 
 <!-- Orbiting rings -->
 <div class="ring" style="width:300px;height:300px;top:50%;left:50%;animation-duration:12s;"></div>
@@ -360,7 +375,6 @@
 <div class="content">
   <div id="home" class="tab-content active">
     <div class="main-text">qore.lol</div>
-    <div class="sub-text">Welcome to my world ✦</div>
   </div>
 
   <div id="videos" class="tab-content">
@@ -382,16 +396,10 @@
     <h2>Socials</h2>
     <div class="socials">
       <div class="social-item">
-        <a href="https://twitter.com/qore" target="_blank">Twitter</a>
+        <a href="https://discord.gg/gdfDuACg" target="_blank">Discord</a>
       </div>
       <div class="social-item">
-        <a href="https://instagram.com/qore" target="_blank">Instagram</a>
-      </div>
-      <div class="social-item">
-        <a href="https://youtube.com/qore" target="_blank">YouTube</a>
-      </div>
-      <div class="social-item">
-        <a href="https://discord.gg/qore" target="_blank">Discord</a>
+        <span>Coming Soon</span>
       </div>
     </div>
   </div>
@@ -403,16 +411,12 @@
 
   <div id="gallery" class="tab-content">
     <h2>Gallery</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item"><img src="https://via.placeholder.com/200" alt="Placeholder"></div>
-      <div class="gallery-item"><img src="https://via.placeholder.com/200" alt="Placeholder"></div>
-      <div class="gallery-item"><img src="https://via.placeholder.com/200" alt="Placeholder"></div>
-    </div>
+    <div class="video-grid" id="gallery-grid"></div>
   </div>
 
   <div id="contact" class="tab-content">
     <h2>Contact</h2>
-    <p>Feel free to reach out via email at qore@example.com or through my socials. Let's connect!</p>
+    <p>Reach out on Discord: <strong>dnstunnel</strong>. Let's connect!</p>
   </div>
 </div>
 
@@ -426,10 +430,6 @@
     mx = e.clientX; my = e.clientY;
     cursor.style.left = mx + 'px';
     cursor.style.top  = my + 'px';
-    setTimeout(() => {
-      trail.style.left = mx + 'px';
-      trail.style.top  = my + 'px';
-    }, 20);
     spawnSparkle(mx, my);
   });
 
@@ -541,7 +541,8 @@
       });
       if (response.ok) {
         const video = await response.json();
-        addVideoToGrid(video);
+        addVideoToGrid(video, videoGrid);
+        addVideoToGrid(video, document.getElementById('gallery-grid'));
         uploadForm.reset();
       } else {
         alert('Upload failed!');
@@ -552,7 +553,7 @@
     }
   });
 
-  function addVideoToGrid(video) {
+  function addVideoToGrid(video, grid = videoGrid) {
     const videoItem = document.createElement('div');
     videoItem.className = 'video-item';
     videoItem.innerHTML = `
@@ -563,7 +564,7 @@
         Your browser does not support the video tag.
       </video>
     `;
-    videoGrid.appendChild(videoItem);
+    grid.appendChild(videoItem);
   }
 
   // ── Load videos from API ──
@@ -571,7 +572,11 @@
     try {
       const response = await fetch('/api/videos');
       const videos = await response.json();
-      videos.forEach(addVideoToGrid);
+      const galleryGrid = document.getElementById('gallery-grid');
+      videos.forEach(video => {
+        addVideoToGrid(video, videoGrid);
+        addVideoToGrid(video, galleryGrid);
+      });
     } catch (error) {
       console.error('Failed to load videos:', error);
     }
