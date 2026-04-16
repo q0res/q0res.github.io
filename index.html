@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Qore's Realm</title>
+<title>qore.lol</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -189,6 +189,14 @@
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(255,0,0,0.3);
   }
+  .video-item h3 {
+    margin-bottom: 0.5rem;
+    color: var(--red);
+  }
+  .video-item p {
+    margin-bottom: 1rem;
+    color: var(--light-grey);
+  }
   video {
     width: 100%;
     border-radius: 4px;
@@ -196,7 +204,26 @@
 
   .upload-section {
     margin-bottom: 2rem;
-    text-align: center;
+    background: var(--grey);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  .upload-section h3 {
+    color: var(--red);
+    margin-bottom: 1rem;
+  }
+  .upload-section input, .upload-section textarea {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--light-grey);
+    color: var(--white);
+    border-radius: 4px;
+  }
+  .upload-section textarea {
+    height: 100px;
+    resize: vertical;
   }
   .upload-btn {
     background: var(--red);
@@ -332,16 +359,22 @@
 <!-- Content -->
 <div class="content">
   <div id="home" class="tab-content active">
-    <div class="main-text">Qore's Realm</div>
+    <div class="main-text">qore.lol</div>
     <div class="sub-text">Welcome to my world ✦</div>
   </div>
 
   <div id="videos" class="tab-content">
     <h2>Videos</h2>
-    <div class="upload-section">
-      <button class="upload-btn" id="upload-btn">Upload Video (Owner Only)</button>
-      <input type="file" id="video-file" accept="video/*" style="display:none;">
+    <div class="upload-section" id="upload-section" style="display:none;">
+      <h3>Upload New Video</h3>
+      <form id="upload-form">
+        <input type="text" id="video-title" placeholder="Video Title" required>
+        <textarea id="video-description" placeholder="Video Description" required></textarea>
+        <input type="file" id="video-file" accept="video/*" required>
+        <button type="submit" class="upload-btn">Upload</button>
+      </form>
     </div>
+    <button class="upload-btn" id="admin-btn">Admin Upload</button>
     <div class="video-grid" id="video-grid"></div>
   </div>
 
@@ -365,7 +398,7 @@
 
   <div id="about" class="tab-content">
     <h2>About</h2>
-    <p>Welcome to Qore's Realm. This is my personal space where I share videos, connect with friends, and showcase my creativity. Enjoy exploring!</p>
+    <p>Welcome to qore.lol. This is my personal space where I share videos, connect with friends, and showcase my creativity. Enjoy exploring!</p>
   </div>
 
   <div id="gallery" class="tab-content">
@@ -396,7 +429,7 @@
     setTimeout(() => {
       trail.style.left = mx + 'px';
       trail.style.top  = my + 'px';
-    }, 80);
+    }, 20);
     spawnSparkle(mx, my);
   });
 
@@ -475,46 +508,76 @@
     });
   });
 
-  // ── Video upload ──
-  const uploadBtn = document.getElementById('upload-btn');
-  const videoFile = document.getElementById('video-file');
+  // ── Video management ──
+  const adminBtn = document.getElementById('admin-btn');
+  const uploadSection = document.getElementById('upload-section');
+  const uploadForm = document.getElementById('upload-form');
   const videoGrid = document.getElementById('video-grid');
 
-  uploadBtn.addEventListener('click', () => {
-    const password = prompt('Enter owner password:');
-    if (password === '121212qore121212454566') { // Simple password check
-      videoFile.click();
+  let isAdmin = false;
+
+  adminBtn.addEventListener('click', () => {
+    const password = prompt('Enter admin password:');
+    if (password === '121212qore121212454566') {
+      isAdmin = true;
+      uploadSection.style.display = 'block';
+      adminBtn.style.display = 'none';
     } else {
       alert('Incorrect password!');
     }
   });
 
-  videoFile.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (file) {
-      const videoItem = document.createElement('div');
-      videoItem.className = 'video-item';
-      const video = document.createElement('video');
-      video.controls = true;
-      video.src = URL.createObjectURL(file);
-      videoItem.appendChild(video);
-      videoGrid.appendChild(videoItem);
+  uploadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('title', document.getElementById('video-title').value);
+    formData.append('description', document.getElementById('video-description').value);
+    formData.append('video', document.getElementById('video-file').files[0]);
+
+    try {
+      const response = await fetch('/api/videos', {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        const video = await response.json();
+        addVideoToGrid(video);
+        uploadForm.reset();
+      } else {
+        alert('Upload failed!');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Upload failed!');
     }
   });
 
-  // ── Load saved videos from localStorage ──
-  const savedVideos = JSON.parse(localStorage.getItem('videos') || '[]');
-  savedVideos.forEach(src => {
+  function addVideoToGrid(video) {
     const videoItem = document.createElement('div');
     videoItem.className = 'video-item';
-    const video = document.createElement('video');
-    video.controls = true;
-    video.src = src;
-    videoItem.appendChild(video);
+    videoItem.innerHTML = `
+      <h3>${video.title}</h3>
+      <p>${video.description}</p>
+      <video controls>
+        <source src="${video.url}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    `;
     videoGrid.appendChild(videoItem);
-  });
+  }
 
-  // Save videos to localStorage (simplified, assumes URLs)
+  // ── Load videos from API ──
+  async function loadVideos() {
+    try {
+      const response = await fetch('/api/videos');
+      const videos = await response.json();
+      videos.forEach(addVideoToGrid);
+    } catch (error) {
+      console.error('Failed to load videos:', error);
+    }
+  }
+
+  loadVideos();
   // For file uploads, we'd need to handle differently, but for demo, this works for URLs
 </script>
 </body>
