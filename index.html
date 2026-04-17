@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QORE.LOL</title>
+<title>qore.lol</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -109,6 +109,12 @@ h1,h2{font-family:'Syne',sans-serif;}
 #notif{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);z-index:99997;background:var(--accent);color:#111;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 32px;border-radius:9999px;opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;box-shadow:0 10px 30px -10px var(--accent);}
 #notif.on{opacity:1;transform:translateX(-50%) translateY(0);}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:#222;border-radius:4px;}
+.asbmt:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(1);}
+.asbmt:disabled::before{display:none;}
+#udbg{font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;margin-top:20px;padding:12px;background:#050505;border:1px solid #111;border-radius:4px;display:none;max-height:100px;overflow-y:auto;white-space:pre-wrap;}
+.dlbtn-js{cursor:pointer;cursor:pointer;}
+
+
 </style>
 </head>
 <body>
@@ -182,6 +188,7 @@ h1,h2{font-family:'Syne',sans-serif;}
     </div>
     <button class="asbmt" id="upload-btn"><span>Upload to QORE.LOL →</span></button>
     <div class="aerr" id="uerr"></div>
+    <div id="udbg" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;margin-top:20px;padding:12px;background:#050505;border:1px solid #111;border-radius:4px;display:none;max-height:100px;overflow-y:auto;white-space:pre-wrap;"></div>
   </div>
 </div>
 
@@ -210,6 +217,7 @@ let cs = 'configs', ck = 'gs';
 let currentSearch = '';
 let currentTagFilter = null;
 let currentUnsubscribe = null;
+let itemsMap = {};
 
 const cur = document.getElementById('cur'), ring = document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
@@ -248,12 +256,28 @@ function renderPanel(items=[]){
   } else {
     items.forEach(item=>{
       const tags=(item.tags||[]).map(t=>`<span class="tpill" data-tag="${escHTML(t)}">${escHTML(t)}</span>`).join('');
-      const dl=!isSrc?`<a class="dlbtn" href="${item.downloadURL||'#'}" download="${escHTML(item.filename||item.title)}"><span>↓ DOWNLOAD</span></a>`:`<span class="viewonly">// VIEW ONLY — NO DOWNLOAD</span>`;
+      const dl=!isSrc?`<button class="dlbtn" data-dlid="${item.id}"><span>↓ DOWNLOAD</span></button>`:`<span class="viewonly">// VIEW ONLY — NO DOWNLOAD</span>`;
       h+=`<div class="frow" id="r${item.id}"><div class="frh"><div class="fdot"></div><button class="fname-btn" data-id="${item.id}"><span class="chv">▶</span>${escHTML(item.title)}</button><div class="fmeta">${tags}<span class="fdate">${item.date||''}</span></div></div><div class="fexp" id="x${item.id}"><div class="fexp-inner"><div class="fdesc">${escHTML(item.desc||'No description provided.')}</div>${dl}</div></div></div>`;
     });
   }
   h+=`</div>`;
   document.getElementById('content').innerHTML=h;
+
+  document.querySelectorAll('[data-dlid]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const item = itemsMap[btn.dataset.dlid];
+        if (item && item.fileData) {
+            const link = document.createElement('a');
+            link.href = item.fileData;
+            link.download = item.filename || item.title;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            notify('Error: No file data found in database.');
+        }
+    });
+  });
 
   const searchEl=document.getElementById('global-search');
   if(searchEl)searchEl.addEventListener('input',e=>{currentSearch=e.target.value;loadItems();});
@@ -283,7 +307,12 @@ function loadItems(){
   const colRef=collection(db,`${cs}_${ck}`);
   currentUnsubscribe=onSnapshot(colRef,snapshot=>{
     let items=[];
-    snapshot.forEach(d=>items.push({id:d.id,...d.data()}));
+    itemsMap = {};
+    snapshot.forEach(d=>{
+        const data = d.data();
+        items.push({id:d.id, ...data});
+        itemsMap[d.id] = data;
+    });
     items.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
     if(currentSearch){
       const q=currentSearch.toLowerCase();
@@ -309,7 +338,9 @@ document.getElementById('admbtn').addEventListener('click',()=>{
 document.getElementById('cls-btn1').addEventListener('click',closeAdm);
 document.getElementById('cls-btn2').addEventListener('click',closeAdm);
 document.getElementById('login-btn').addEventListener('click',doLogin);
-document.getElementById('upload-btn').addEventListener('click',doUpload);
+document.getElementById('upload-btn').addEventListener('click',()=>{
+    if(!document.getElementById('upload-btn').disabled) doUpload();
+});
 document.getElementById('apw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
 function closeAdm(){document.getElementById('admov').classList.remove('on');}
@@ -357,7 +388,9 @@ dropzone.addEventListener('drop',e=>{
 });
 
 async function doUpload() {
-    console.log("=== UPLOAD BUTTON CLICKED ===");   // This MUST appear in console
+    const btn = document.getElementById('upload-btn');
+    const btnSpan = btn.querySelector('span');
+    const origText = btnSpan.textContent;
 
     const sec = document.getElementById('usec').value;
     const cat = document.getElementById('ucat').value;
@@ -368,35 +401,54 @@ async function doUpload() {
     const fileInput = document.getElementById('ufile');
     const file = fileInput.files[0];
 
-    console.log("Section:", sec, "Category:", cat, "Title:", title, "Has file:", !!file);
-
     if (!title) {
         showUErr('// title is required');
-        console.log("Failed: No title");
         return;
+    }
+
+    if (!file && sec !== 'source') {
+        showUErr('// file attachment required');
+        return;
+    }
+
+    // Enter loading state
+    btn.disabled = true;
+    btnSpan.textContent = 'UPLOADING...';
+    
+    const dbg = document.getElementById('udbg');
+    dbg.style.display = 'block';
+    dbg.textContent = 'Starting upload process...\n';
+
+    // Protocol warning removed to allow local testing
+    if (window.location.protocol === 'file:') {
+        dbg.textContent += 'WARNING: Detected file:// protocol. Local testing may have CORS issues if Firebase rules are strict.\n';
     }
 
     const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     const timestamp = Date.now();
 
     try {
-        let downloadURL = null;
+        let fileData = null;
         let filename = title;
 
         if (file) {
             filename = file.name;
-            const path = `${sec}/${cat}/${Date.now()}_${filename}`;
-            console.log("Uploading file to path:", path);
-
-            const storageRef = ref(storage, path);
-            const snapshot = await uploadBytes(storageRef, file);
-            console.log("File uploaded successfully, size:", snapshot.totalBytes);
-
-            downloadURL = await getDownloadURL(snapshot.ref);
-            console.log("Download URL:", downloadURL);
+            dbg.textContent += `Uploading ${filename} to storage...\n`;
+            
+            const storagePath = `uploads/${sec}/${cat}/${timestamp}_${filename}`;
+            const storageRef = ref(storage, storagePath);
+            
+            // Fix for file:// protocol hang: use simple uploadBytes instead of uploadBytesResumable
+            dbg.textContent += `Buffering file to memory...\n`;
+            const arrayBuffer = await file.arrayBuffer();
+            
+            dbg.textContent += `Sending to server...\n`;
+            const snapshot = await uploadBytes(storageRef, arrayBuffer, { contentType: file.type || 'application/octet-stream' });
+            
+            fileData = await getDownloadURL(snapshot.ref);
+            
+            dbg.textContent += `File stored successfully.\n`;
         }
-
-        console.log("Adding document to Firestore collection:", `${sec}_${cat}`);
 
         await addDoc(collection(db, `${sec}_${cat}`), {
             title,
@@ -404,15 +456,16 @@ async function doUpload() {
             tags,
             date,
             timestamp,
-            downloadURL,
+            fileData,
             filename
         });
 
-        console.log("Document added successfully!");
-
         notify('✓ Uploaded: ' + title);
-
-        // Reset form
+        
+        // Success: Close modal and reset
+        closeAdm();
+        
+        // Reset form for next time
         document.getElementById('utit').value = '';
         document.getElementById('udsc').value = '';
         document.getElementById('utag').value = '';
@@ -423,10 +476,11 @@ async function doUpload() {
         loadItems();
 
     } catch (err) {
-        console.error("=== UPLOAD ERROR ===", err);
-        console.error("Error code:", err.code);
-        console.error("Error message:", err.message);
-        showUErr('// upload failed — check console (F12)');
+        console.error("Upload error:", err);
+        showUErr('// upload failed: check rules or connection');
+    } finally {
+        btn.disabled = false;
+        btnSpan.textContent = origText;
     }
 }
 
@@ -439,23 +493,33 @@ async function renderRecent(){
   const el=document.getElementById('rlist');
   el.innerHTML=`<div style="font:9px/1 JetBrains Mono,mono;letter-spacing:.3em;color:#222;text-transform:uppercase;margin-bottom:12px;">Recent Uploads</div>`;
   const cols=['configs_gs','configs_nl','lua_gs','lua_nl','source_valorant','source_cs2','source_r6','source_bo7','source_apex','source_rust','source_imgui','source_tools'];
-  for(let col of cols){
-    try{
-      const snap=await getDocs(query(collection(db,col),orderBy("timestamp","desc"),limit(3)));
-      snap.forEach(d=>{
-        const item=d.data();
-        const dEl=document.createElement('div');
-        dEl.style='display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #111;font-family:JetBrains Mono,monospace;font-size:12px;';
-        const delBtn=document.createElement('button');
-        delBtn.style='background:none;border:none;color:#f66;font-size:18px;cursor:pointer;';
-        delBtn.textContent='×';
-        delBtn.addEventListener('click',e=>{e.stopPropagation();delItem(col,d.id);});
-        dEl.innerHTML=`<span style="flex:1;color:#ccc;">${escHTML(item.title)}</span><span style="font-size:9px;color:var(--accent);opacity:.7;">${col}</span>`;
-        dEl.appendChild(delBtn);
-        el.appendChild(dEl);
-      });
-    } catch(e){}
-  }
+  
+  // Fetch all in parallel for better performance
+  const promises = cols.map(async (col) => {
+    try {
+      const snap = await getDocs(query(collection(db, col), orderBy("timestamp", "desc"), limit(3)));
+      return { col, docs: snap.docs };
+    } catch (e) {
+      return { col, docs: [] };
+    }
+  });
+
+  const results = await Promise.all(promises);
+  
+  results.forEach(({col, docs}) => {
+    docs.forEach(d => {
+      const item = d.data();
+      const dEl = document.createElement('div');
+      dEl.style = 'display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #111;font-family:JetBrains Mono,monospace;font-size:12px;';
+      const delBtn = document.createElement('button');
+      delBtn.style = 'background:none;border:none;color:#f66;font-size:18px;cursor:pointer;';
+      delBtn.textContent = '×';
+      delBtn.addEventListener('click', e => { e.stopPropagation(); delItem(col, d.id); });
+      dEl.innerHTML = `<span style="flex:1;color:#ccc;">${escHTML(item.title)}</span><span style="font-size:9px;color:var(--accent);opacity:.7;">${col}</span>`;
+      dEl.appendChild(delBtn);
+      el.appendChild(dEl);
+    });
+  });
 }
 
 async function delItem(colPath,id){
