@@ -3,19 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QORE.LOL</title>
+<title>qore.lol</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* Your original CSS - unchanged */
 :root {
-  --bg: #050505;
-  --surface: #0b0b0b;
-  --border: #1c1c1c;
-  --border-h: #2e2e2e;
-  --text: #e4e4e4;
-  --dim: #464646;
-  --mid: #787878;
-  --accent: #00ff9d;
+  --bg: #0a0a0a;
+  --surface: #121212;
+  --border: #252525;
+  --border-h: #3a3a3a;
+  --text: #f0f0f0;
+  --dim: #aaaaaa;
+  --mid: #777777;
+  --accent: #cccccc;
   --sw: 260px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -27,23 +26,23 @@ h1,h2{font-family:'Syne',sans-serif;}
 
 /* CURSOR */
 #cur{position:fixed;width:10px;height:10px;background:#fff;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:transform .06s;}
-#ring{position:fixed;width:30px;height:30px;border:1px solid rgba(255,255,255,.3);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .18s,height .18s,opacity .18s;}
+#ring{position:fixed;width:30px;height:30px;border:1px solid rgba(255,255,255,.25);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .18s,height .18s,opacity .18s;}
 #cur.c{transform:translate(-50%,-50%) scale(.35);}
-#ring.c{width:46px;height:46px;opacity:.15;}
+#ring.c{width:46px;height:46px;opacity:.2;}
 
 /* BACKGROUND */
-#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.3;}
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.25;}
 .gbg{position:fixed;inset:0;z-index:1;pointer-events:none;
-  background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
   background-size:64px 64px;animation:gd 28s linear infinite;}
 @keyframes gd{to{background-position:64px 64px;}}
 .scn{position:fixed;inset:0;z-index:2;pointer-events:none;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.1) 2px,rgba(0,0,0,.1) 4px);}
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px);}
 
 /* LAYOUT */
 #shell{position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;}
 #top{display:flex;align-items:center;padding:0 32px;height:62px;border-bottom:1px solid var(--border);
-  background:rgba(5,5,5,.92);backdrop-filter:blur(16px);position:sticky;top:0;z-index:200;}
+  background:rgba(10,10,10,.95);backdrop-filter:blur(16px);position:sticky;top:0;z-index:200;}
 .logo{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.02em;color:#fff;text-transform:uppercase;}
 .logo-dot{color:var(--accent);}
 .logo-tag{font-size:10px;color:var(--dim);letter-spacing:.32em;margin-left:16px;font-weight:400;text-transform:uppercase;padding-top:2px;}
@@ -64,11 +63,11 @@ h1,h2{font-family:'Syne',sans-serif;}
   color:var(--dim);letter-spacing:.02em;text-transform:uppercase;background:transparent;border:none;width:100%;text-align:left;
   position:relative;overflow:hidden;transition:all .25s;}
 .ni::before{content:'';position:absolute;left:0;top:0;width:3px;height:100%;background:var(--accent);transform:scaleY(0);transition:transform .3s cubic-bezier(.16,1,.3,1);}
-.ni::after{content:'';position:absolute;inset:0;background:rgba(0,255,157,.06);transform:translateX(-100%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
+.ni::after{content:'';position:absolute;inset:0;background:rgba(204,204,204,.06);transform:translateX(-100%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
 .ni:hover::after,.ni.on::after{transform:translateX(0);}
 .ni:hover,.ni.on{color:#fff;}
 .ni.on::before{transform:scaleY(1);}
-.ni.on{background:rgba(0,255,157,.08);box-shadow:0 0 0 1px rgba(0,255,157,.15) inset;}
+.ni.on{background:rgba(204,204,204,.08);box-shadow:0 0 0 1px rgba(204,204,204,.15) inset;}
 .ni-ic{font-size:15px;opacity:.6;min-width:18px;}
 
 /* CONTENT */
@@ -82,23 +81,23 @@ h1,h2{font-family:'Syne',sans-serif;}
 .search-box{position:relative;flex:1;max-width:420px;min-width:260px;}
 .search-box input{width:100%;background:#111;border:1px solid var(--border);color:#fff;
   font-family:'JetBrains Mono',monospace;font-size:14px;padding:14px 20px 14px 48px;border-radius:9999px;outline:none;transition:all .2s;}
-.search-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,255,157,.15);}
+.search-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(204,204,204,.15);}
 .search-box::before{content:"🔎";position:absolute;left:22px;top:50%;transform:translateY(-50%);font-size:18px;opacity:.4;}
 
 /* FILE LIST */
 .flist{display:flex;flex-direction:column;gap:2px;}
 .frow{border:1px solid var(--border);background:var(--surface);overflow:hidden;transition:all .25s;border-radius:8px;}
-.frow:hover{border-color:var(--accent);box-shadow:0 4px 20px -4px rgba(0,255,157,.2);}
+.frow:hover{border-color:var(--accent);box-shadow:0 4px 20px -4px rgba(204,204,204,.15);}
 
 .frh{display:flex;align-items:center;padding:18px 22px;gap:14px;}
-.fdot{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.25;flex-shrink:0;}
+.fdot{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.6;flex-shrink:0;}
 .fname-btn{background:none;border:none;font-family:'Syne',sans-serif;font-size:16.5px;font-weight:700;color:#ccc;letter-spacing:.01em;flex:1;text-align:left;display:flex;align-items:center;gap:10px;transition:color .2s;}
 .frow:hover .fname-btn{color:#fff;}
 .chv{font-size:10px;color:var(--dim);transition:transform .25s,color .2s;display:inline-block;}
 .frow.exp .chv{transform:rotate(90deg);color:var(--accent);}
 .fmeta{display:flex;gap:8px;align-items:center;margin-left:auto;flex-shrink:0;flex-wrap:wrap;}
-.tpill{font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(0,255,157,.3);padding:4px 10px;border-radius:9999px;cursor:pointer;transition:all .2s;}
-.tpill:hover{background:rgba(0,255,157,.15);color:#fff;}
+.tpill{font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(204,204,204,.3);padding:4px 10px;border-radius:9999px;cursor:pointer;transition:all .2s;}
+.tpill:hover{background:rgba(204,204,204,.15);color:#fff;}
 .fdate{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#444;letter-spacing:.1em;}
 
 .fexp{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1);background:rgba(255,255,255,.015);border-top:1px solid var(--border);}
@@ -140,7 +139,7 @@ h1,h2{font-family:'Syne',sans-serif;}
 
 .fdrop{border:2px dashed #222;padding:32px;text-align:center;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#666;letter-spacing:.2em;text-transform:uppercase;position:relative;transition:all .2s;}
 .fdrop:hover{border-color:var(--accent);color:#aaa;}
-.fdrop.drag{border-color:var(--accent);background:rgba(0,255,157,.05);color:var(--accent);}
+.fdrop.drag{border-color:var(--accent);background:rgba(204,204,204,.05);color:var(--accent);}
 .fdrop input[type=file]{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;}
 
 .asbmt{width:100%;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;background:transparent;border:1px solid var(--accent);color:var(--accent);padding:16px;border-radius:9999px;margin-top:12px;transition:all .3s;position:relative;overflow:hidden;}
@@ -153,7 +152,7 @@ h1,h2{font-family:'Syne',sans-serif;}
 .aerr.on{display:block;}
 
 /* NOTIF */
-#notif{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);z-index:99997;background:var(--accent);color:#000;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 32px;border-radius:9999px;opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;box-shadow:0 10px 30px -10px var(--accent);}
+#notif{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);z-index:99997;background:var(--accent);color:#111;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 32px;border-radius:9999px;opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;box-shadow:0 10px 30px -10px var(--accent);}
 #notif.on{opacity:1;transform:translateX(-50%) translateY(0);}
 
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:#222;border-radius:4px;}
@@ -244,7 +243,7 @@ h1,h2{font-family:'Syne',sans-serif;}
 </div>
 
 <script type="module">
-// ── FIREBASE CONFIG ─────────────────────────────────────
+// ── FIREBASE ─────────────────────────────────────────────
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
@@ -255,22 +254,24 @@ const firebaseConfig = {
   projectId: "qore-707b2",
   storageBucket: "qore-707b2.firebasestorage.app",
   messagingSenderId: "649511949210",
-  appId: "1:649511949210:web:1934ba602511a66d9a2023",
-  measurementId: "G-GTJH2PNSJE"
+  appId: "1:649511949210:web:1934ba602511a66d9a2023"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// ── DATA & STATE ────────────────────────────────────────
-const PASS = 'vaultdrop2025'; // Change this!
+// ── CONFIG ───────────────────────────────────────────────
+const PASS = 'vaultdrop2025';   // ← Change this to a strong password!
+
+// ── STATE ────────────────────────────────────────────────
+let logged = false;
+let cs = 'configs', ck = 'gs';
 let currentSearch = '';
 let currentTagFilter = null;
-let cs = 'configs', ck = 'gs';
-let logged = false;
+let currentUnsubscribe = null;
 
-// ── CURSOR + BACKGROUND (unchanged) ─────────────────────
+// ── CURSOR + BACKGROUND ──────────────────────────────────
 const cur = document.getElementById('cur'), ring = document.getElementById('ring');
 let mx=0, my=0, rx=0, ry=0;
 document.addEventListener('mousemove', e=>{mx=e.clientX; my=e.clientY;});
@@ -280,34 +281,32 @@ document.addEventListener('mouseup', ()=>{cur.classList.remove('c'); ring.classL
 
 const cv=document.getElementById('bgc'), cx=cv.getContext('2d'); let W,H;
 const rs=()=>{W=cv.width=innerWidth; H=cv.height=innerHeight;}; rs(); addEventListener('resize',rs);
-class P{constructor(){this.i();}i(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.32;this.vy=(Math.random()-.5)*.32;this.r=Math.random()*1.1+.3;this.a=Math.random()*.28+.06;this.l=0;this.m=220+Math.random()*320;}s(){this.x+=this.vx;this.y+=this.vy;this.l++;if(this.l>this.m||this.x<0||this.x>W||this.y<0||this.y>H)this.i();}d(){const f=Math.min(this.l/40,1)*Math.min((this.m-this.l)/40,1);cx.globalAlpha=this.a*f;cx.fillStyle='#00ff9d';cx.fillRect(this.x,this.y,this.r,this.r);}}
+class P{constructor(){this.i();}i(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.32;this.vy=(Math.random()-.5)*.32;this.r=Math.random()*1.1+.3;this.a=Math.random()*.28+.06;this.l=0;this.m=220+Math.random()*320;}s(){this.x+=this.vx;this.y+=this.vy;this.l++;if(this.l>this.m||this.x<0||this.x>W||this.y<0||this.y>H)this.i();}d(){const f=Math.min(this.l/40,1)*Math.min((this.m-this.l)/40,1);cx.globalAlpha=this.a*f;cx.fillStyle='#cccccc';cx.fillRect(this.x,this.y,this.r,this.r);}}
 const pts=[];for(let i=0;i<90;i++)pts.push(new P());
-(function tbg(){cx.clearRect(0,0,W,H);pts.forEach((p,i)=>{p.s();p.d();for(let j=i+1;j<pts.length;j++){const dx=p.x-pts[j].x,dy=p.y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<85){cx.globalAlpha=(1-d/85)*.055;cx.strokeStyle='#00ff9d';cx.lineWidth=.5;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(pts[j].x,pts[j].y);cx.stroke();}}});requestAnimationFrame(tbg);})();
+(function tbg(){cx.clearRect(0,0,W,H);pts.forEach((p,i)=>{p.s();p.d();for(let j=i+1;j<pts.length;j++){const dx=p.x-pts[j].x,dy=p.y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<85){cx.globalAlpha=(1-d/85)*.04;cx.strokeStyle='#cccccc';cx.lineWidth=.5;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(pts[j].x,pts[j].y);cx.stroke();}}});requestAnimationFrame(tbg);})();
 
-// ── LABELS ──────────────────────────────────────────────
+// ── LABELS ───────────────────────────────────────────────
 const LBL = {
   configs:{gs:'Gamesense', nl:'Neverlose'},
   lua:{gs:'Gamesense', nl:'Neverlose'},
   source:{valorant:'Valorant', cs2:'CS2', r6:'R6 Siege', bo7:'Black Ops 7', apex:'Apex', rust:'Rust', imgui:'ImGui', tools:'Tools'}
 };
 
-// ── NAV TABS ────────────────────────────────────────────
+// ── NAV TABS ─────────────────────────────────────────────
 function activateTab(s, k) {
   cs = s; ck = k;
   document.querySelectorAll('.ni').forEach(b => b.classList.remove('on'));
   const activeBtn = Array.from(document.querySelectorAll('.ni')).find(btn => btn.dataset.s === s && btn.dataset.k === k);
   if (activeBtn) activeBtn.classList.add('on');
   currentSearch = ''; currentTagFilter = null;
-  renderPanel();
+  loadItems();
 }
 
 document.querySelectorAll('.ni').forEach(btn => {
   btn.addEventListener('click', () => activateTab(btn.dataset.s, btn.dataset.k));
 });
 
-// ── RENDER & FIRESTORE LISTENERS ───────────────────────
-let currentUnsubscribe = null;
-
+// ── RENDER ───────────────────────────────────────────────
 function renderPanel(items = []) {
   const label = LBL[cs][ck] || ck;
   const isSrc = cs === 'source';
@@ -319,7 +318,7 @@ function renderPanel(items = []) {
       <div class="search-box">
         <input type="text" id="global-search" placeholder="Search title, description or tags..." value="${currentSearch}" oninput="handleSearch(this.value)">
       </div>
-      <div style="background:#111;border:1px solid var(--accent);color:var(--accent);padding:6px 16px;border-radius:9999px;font-size:10px;">${items.length} file${items.length===1?'':'s'}</div>
+      <div style="background:#1a1a1a;border:1px solid var(--accent);color:var(--accent);padding:6px 16px;border-radius:9999px;font-size:10px;">${items.length} file${items.length===1?'':'s'}</div>
     </div>
     <div class="flist">`;
 
@@ -349,64 +348,64 @@ function renderPanel(items = []) {
   }
   h += `</div>`;
   document.getElementById('content').innerHTML = h;
-  updStats();
-}
-
-function loadItems() {
-  if (currentUnsubscribe) currentUnsubscribe();
-
-  const colRef = collection(db, `${cs}_${ck}`);
-  const q = query(colRef, orderBy("timestamp", "desc"));
-
-  currentUnsubscribe = onSnapshot(q, (snapshot) => {
-    const items = [];
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      items.push({ id: doc.id, ...data });
-    });
-    renderPanel(items);
-  });
 }
 
 function escHTML(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function tog(id){ /* unchanged */ 
+function tog(id){
   const row = document.getElementById('r'+id);
   const open = row.classList.contains('exp');
   document.querySelectorAll('.frow.exp').forEach(r => r.classList.remove('exp'));
   if (!open) row.classList.add('exp');
 }
 
-function handleSearch(val) { currentSearch = val; loadItems(); } // re-load on search
+function handleSearch(val) {
+  currentSearch = val;
+  loadItems();
+}
+
 function filterByTag(tag) {
   currentTagFilter = currentTagFilter === tag ? null : tag;
   loadItems();
 }
 
-function updStats() {
-  // Simple total count (you can improve later if needed)
-  document.getElementById('sc').textContent = '—';
-  document.getElementById('sl').textContent = '—';
-  document.getElementById('ss').textContent = '—';
+// ── FIRESTORE LOAD ───────────────────────────────────────
+function loadItems() {
+  if (currentUnsubscribe) currentUnsubscribe();
+
+  const colRef = collection(db, `${cs}_${ck}`);
+
+  currentUnsubscribe = onSnapshot(colRef, (snapshot) => {
+    const items = [];
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      items.push({ id: doc.id, ...data });
+    });
+    // Sort newest first
+    items.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    renderPanel(items);
+  });
 }
 
-// Initial load
-loadItems();
-
-// ── ADMIN PANEL (with real upload) ──────────────────────
+// ── ADMIN PANEL ──────────────────────────────────────────
 document.getElementById('admbtn').addEventListener('click', () => {
   document.getElementById('admov').classList.add('on');
-  if (logged) showPanel(); else setTimeout(() => document.getElementById('apw').focus(), 100);
+  if (logged) showUploadPanel();
+  else {
+    document.getElementById('alog').style.display = 'block';
+    document.getElementById('apnl').style.display = 'none';
+    setTimeout(() => document.getElementById('apw').focus(), 100);
+  }
 });
 
-function closeAdm() { document.getElementById('admov').classList.remove('on'); }
-document.getElementById('admov').addEventListener('click', e => { if (e.target === document.getElementById('admov')) closeAdm(); });
-document.getElementById('apw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+function closeAdm() {
+  document.getElementById('admov').classList.remove('on');
+}
 
 function doLogin() {
   if (document.getElementById('apw').value === PASS) {
     logged = true;
-    showPanel();
     document.getElementById('apw').value = '';
+    showUploadPanel();
   } else {
     const e = document.getElementById('lerr');
     e.classList.add('on');
@@ -414,12 +413,13 @@ function doLogin() {
   }
 }
 
-function showPanel() {
+function showUploadPanel() {
   document.getElementById('alog').style.display = 'none';
   document.getElementById('apnl').style.display = 'block';
   renderRecent();
 }
 
+// Upload, Recent, Delete functions (same as before)
 document.getElementById('usec').addEventListener('change', function() {
   const sel = document.getElementById('ucat'); sel.innerHTML = '';
   const opts = this.value === 'source' 
@@ -432,7 +432,6 @@ document.getElementById('usec').addEventListener('change', function() {
 
 function onFS(inp) { document.getElementById('fdlbl').textContent = inp.files[0]?.name || 'Click or drag & drop file here'; }
 
-// Drag & drop
 const dropzone = document.getElementById('fdropzone');
 dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
 dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
@@ -470,22 +469,19 @@ async function doUpload() {
     }
 
     await addDoc(collection(db, `${sec}_${cat}`), {
-      title,
-      desc,
-      tags,
-      date,
-      timestamp,
-      downloadURL,
-      filename
+      title, desc, tags, date, timestamp, downloadURL, filename
     });
 
     notify('✓ Uploaded: ' + title);
-    ['utit','udsc','utag'].forEach(i => document.getElementById(i).value = '');
+    document.getElementById('utit').value = '';
+    document.getElementById('udsc').value = '';
+    document.getElementById('utag').value = '';
     document.getElementById('ufile').value = '';
     document.getElementById('fdlbl').textContent = 'Click or drag & drop file here';
     renderRecent();
+    loadItems();
   } catch (err) {
-    showUErr('// upload failed — check console');
+    showUErr('// upload failed');
     console.error(err);
   }
 }
@@ -499,28 +495,28 @@ async function renderRecent() {
   const el = document.getElementById('rlist');
   el.innerHTML = `<div style="font:9px/1 JetBrains Mono,mono;letter-spacing:.3em;color:#222;text-transform:uppercase;margin-bottom:12px;">Recent Uploads</div>`;
 
-  // For simplicity we show recent from all collections (you can expand later)
   const collections = ['configs_gs','configs_nl','lua_gs','lua_nl','source_valorant','source_cs2','source_r6','source_bo7','source_apex','source_rust','source_imgui','source_tools'];
   
   for (let col of collections) {
-    const snap = await getDocs(query(collection(db, col), orderBy("timestamp", "desc"), limit(3)));
-    snap.forEach(d => {
-      const item = d.data();
-      const dEl = document.createElement('div');
-      dEl.style = 'display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #111;font-family:JetBrains Mono,monospace;font-size:12px;';
-      dEl.innerHTML = `
-        <span style="flex:1;color:#ccc;">${escHTML(item.title)}</span>
-        <span style="font-size:9px;color:#00ff9d;opacity:.7;">${col}</span>
-        <button onclick="delItem('${col}','${d.id}');event.stopImmediatePropagation();" style="background:none;border:none;color:#f66;font-size:18px;cursor:pointer;">×</button>
-      `;
-      el.appendChild(dEl);
-    });
+    try {
+      const snap = await getDocs(query(collection(db, col), orderBy("timestamp", "desc"), limit(3)));
+      snap.forEach(d => {
+        const item = d.data();
+        const dEl = document.createElement('div');
+        dEl.style = 'display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #111;font-family:JetBrains Mono,monospace;font-size:12px;';
+        dEl.innerHTML = `
+          <span style="flex:1;color:#ccc;">${escHTML(item.title)}</span>
+          <span style="font-size:9px;color:var(--accent);opacity:.7;">${col}</span>
+          <button onclick="delItem('${col}','${d.id}');event.stopImmediatePropagation();" style="background:none;border:none;color:#f66;font-size:18px;cursor:pointer;">×</button>
+        `;
+        el.appendChild(dEl);
+      });
+    } catch(e) {}
   }
 }
 
 async function delItem(colPath, id) {
-  if (!logged) return;
-  if (!confirm('Delete this item?')) return;
+  if (!logged || !confirm('Delete this item?')) return;
   await deleteDoc(doc(db, colPath, id));
   notify('Deleted');
   renderRecent();
@@ -540,6 +536,9 @@ document.addEventListener('keydown', e => {
     document.getElementById('global-search').focus();
   }
 });
+
+// Initial load
+loadItems();
 </script>
 </body>
 </html>
