@@ -357,71 +357,77 @@ dropzone.addEventListener('drop',e=>{
 });
 
 async function doUpload() {
-  const sec = document.getElementById('usec').value;
-  const cat = document.getElementById('ucat').value;
-  const title = document.getElementById('utit').value.trim();
-  const desc = document.getElementById('udsc').value.trim();
-  const tags = document.getElementById('utag').value.split(',').map(t => t.trim()).filter(Boolean);
-  const fileInput = document.getElementById('ufile');
-  const file = fileInput.files[0];
+    console.log("=== UPLOAD BUTTON CLICKED ===");   // This MUST appear in console
 
-  if (!title) {
-    showUErr('// title is required');
-    return;
-  }
+    const sec = document.getElementById('usec').value;
+    const cat = document.getElementById('ucat').value;
+    const title = document.getElementById('utit').value.trim();
+    const desc = document.getElementById('udsc').value.trim();
+    const tagInput = document.getElementById('utag').value;
+    const tags = tagInput ? tagInput.split(',').map(t => t.trim()).filter(Boolean) : [];
+    const fileInput = document.getElementById('ufile');
+    const file = fileInput.files[0];
 
-  const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  const timestamp = Date.now();
+    console.log("Section:", sec, "Category:", cat, "Title:", title, "Has file:", !!file);
 
-  try {
-    let downloadURL = null;
-    let filename = title;
-
-    // === UPLOAD FILE TO STORAGE (if any) ===
-    if (file) {
-      filename = file.name;
-      const storageRef = ref(storage, `${sec}/${cat}/${Date.now()}_${filename}`);
-
-      console.log('Starting upload to:', `${sec}/${cat}/${Date.now()}_${filename}`);
-
-      const snapshot = await uploadBytes(storageRef, file);
-      console.log('Upload completed. Bytes transferred:', snapshot.totalBytes);
-
-      downloadURL = await getDownloadURL(snapshot.ref);
-      console.log('Download URL obtained:', downloadURL);
+    if (!title) {
+        showUErr('// title is required');
+        console.log("Failed: No title");
+        return;
     }
 
-    // === ADD TO FIRESTORE ===
-    console.log('Adding document to collection:', `${sec}_${cat}`);
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    const timestamp = Date.now();
 
-    await addDoc(collection(db, `${sec}_${cat}`), {
-      title,
-      desc,
-      tags,
-      date,
-      timestamp,
-      downloadURL,
-      filename
-    });
+    try {
+        let downloadURL = null;
+        let filename = title;
 
-    console.log('Document added successfully');
+        if (file) {
+            filename = file.name;
+            const path = `${sec}/${cat}/${Date.now()}_${filename}`;
+            console.log("Uploading file to path:", path);
 
-    notify('✓ Uploaded: ' + title);
+            const storageRef = ref(storage, path);
+            const snapshot = await uploadBytes(storageRef, file);
+            console.log("File uploaded successfully, size:", snapshot.totalBytes);
 
-    // Reset form
-    document.getElementById('utit').value = '';
-    document.getElementById('udsc').value = '';
-    document.getElementById('utag').value = '';
-    fileInput.value = '';
-    document.getElementById('fdlbl').textContent = 'Click or drag & drop file here';
+            downloadURL = await getDownloadURL(snapshot.ref);
+            console.log("Download URL:", downloadURL);
+        }
 
-    renderRecent();
-    loadItems();
+        console.log("Adding document to Firestore collection:", `${sec}_${cat}`);
 
-  } catch (err) {
-    console.error('Upload error details:', err);
-    showUErr('// upload failed — check console (F12)');
-  }
+        await addDoc(collection(db, `${sec}_${cat}`), {
+            title,
+            desc: desc || "",
+            tags,
+            date,
+            timestamp,
+            downloadURL,
+            filename
+        });
+
+        console.log("Document added successfully!");
+
+        notify('✓ Uploaded: ' + title);
+
+        // Reset form
+        document.getElementById('utit').value = '';
+        document.getElementById('udsc').value = '';
+        document.getElementById('utag').value = '';
+        fileInput.value = '';
+        document.getElementById('fdlbl').textContent = 'Click or drag & drop file here';
+
+        renderRecent();
+        loadItems();
+
+    } catch (err) {
+        console.error("=== UPLOAD ERROR ===", err);
+        console.error("Error code:", err.code);
+        console.error("Error message:", err.message);
+        showUErr('// upload failed — check console (F12)');
+    }
 }
 
 function showUErr(m){
