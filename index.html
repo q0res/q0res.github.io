@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>qore.lol</title>
+<title>QORE.LOL</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -21,28 +21,20 @@
 html,body{height:100%;}
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow-x:hidden;}
 
-/* TYPOGRAPHY */
 h1,h2{font-family:'Syne',sans-serif;}
 
-/* CURSOR */
 #cur{position:fixed;width:10px;height:10px;background:#fff;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:transform .06s;}
 #ring{position:fixed;width:30px;height:30px;border:1px solid rgba(255,255,255,.25);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .18s,height .18s,opacity .18s;}
 #cur.c{transform:translate(-50%,-50%) scale(.35);}
 #ring.c{width:46px;height:46px;opacity:.2;}
 
-/* BACKGROUND */
 #bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.25;}
-.gbg{position:fixed;inset:0;z-index:1;pointer-events:none;
-  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
-  background-size:64px 64px;animation:gd 28s linear infinite;}
+.gbg{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:64px 64px;animation:gd 28s linear infinite;}
 @keyframes gd{to{background-position:64px 64px;}}
-.scn{position:fixed;inset:0;z-index:2;pointer-events:none;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px);}
+.scn{position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px);}
 
-/* LAYOUT */
 #shell{position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;}
-#top{display:flex;align-items:center;padding:0 32px;height:62px;border-bottom:1px solid var(--border);
-  background:rgba(10,10,10,.95);backdrop-filter:blur(16px);position:sticky;top:0;z-index:200;}
+#top{display:flex;align-items:center;padding:0 32px;height:62px;border-bottom:1px solid var(--border);background:rgba(10,10,10,.95);backdrop-filter:blur(16px);position:sticky;top:0;z-index:200;}
 .logo{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.02em;color:#fff;text-transform:uppercase;}
 .logo-dot{color:var(--accent);}
 .logo-tag{font-size:10px;color:var(--dim);letter-spacing:.32em;margin-left:16px;font-weight:400;text-transform:uppercase;padding-top:2px;}
@@ -51,17 +43,11 @@ h1,h2{font-family:'Syne',sans-serif;}
 .ts{font-size:9px;color:var(--dim);letter-spacing:.24em;text-transform:uppercase;display:flex;flex-direction:column;align-items:flex-end;}
 .ts strong{font-size:17px;font-weight:600;color:var(--accent);line-height:1;font-family:'Syne',sans-serif;}
 
-/* SIDEBAR TABS */
 #body{display:flex;flex:1;min-height:0;}
-#sidebar{width:var(--sw);min-width:var(--sw);border-right:1px solid var(--border);
-  background:rgba(7,7,7,.75);padding:28px 0 40px;display:flex;flex-direction:column;
-  position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
-
+#sidebar{width:var(--sw);min-width:var(--sw);border-right:1px solid var(--border);background:rgba(7,7,7,.75);padding:28px 0 40px;display:flex;flex-direction:column;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
 .sg{font-size:9px;letter-spacing:.4em;color:#222;text-transform:uppercase;padding:0 24px 12px;margin-bottom:8px;font-weight:500;border-bottom:1px solid #111;}
 
-.ni{display:flex;align-items:center;gap:12px;padding:14px 24px;font-family:'Syne',sans-serif;font-size:14.5px;font-weight:600;
-  color:var(--dim);letter-spacing:.02em;text-transform:uppercase;background:transparent;border:none;width:100%;text-align:left;
-  position:relative;overflow:hidden;transition:all .25s;}
+.ni{display:flex;align-items:center;gap:12px;padding:14px 24px;font-family:'Syne',sans-serif;font-size:14.5px;font-weight:600;color:var(--dim);letter-spacing:.02em;text-transform:uppercase;background:transparent;border:none;width:100%;text-align:left;position:relative;overflow:hidden;transition:all .25s;}
 .ni::before{content:'';position:absolute;left:0;top:0;width:3px;height:100%;background:var(--accent);transform:scaleY(0);transition:transform .3s cubic-bezier(.16,1,.3,1);}
 .ni::after{content:'';position:absolute;inset:0;background:rgba(204,204,204,.06);transform:translateX(-100%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
 .ni:hover::after,.ni.on::after{transform:translateX(0);}
@@ -70,21 +56,17 @@ h1,h2{font-family:'Syne',sans-serif;}
 .ni.on{background:rgba(204,204,204,.08);box-shadow:0 0 0 1px rgba(204,204,204,.15) inset;}
 .ni-ic{font-size:15px;opacity:.6;min-width:18px;}
 
-/* CONTENT */
 #content{flex:1;padding:40px 48px 100px;overflow-y:auto;background:var(--bg);}
 
-/* HEADER */
 .phdr{margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 .phdr h1{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;letter-spacing:-.02em;color:#fff;line-height:1;}
 .phdr h1 span{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:400;color:var(--accent);display:block;letter-spacing:.3em;margin-bottom:6px;text-transform:uppercase;}
 
 .search-box{position:relative;flex:1;max-width:420px;min-width:260px;}
-.search-box input{width:100%;background:#111;border:1px solid var(--border);color:#fff;
-  font-family:'JetBrains Mono',monospace;font-size:14px;padding:14px 20px 14px 48px;border-radius:9999px;outline:none;transition:all .2s;}
+.search-box input{width:100%;background:#111;border:1px solid var(--border);color:#fff;font-family:'JetBrains Mono',monospace;font-size:14px;padding:14px 20px 14px 48px;border-radius:9999px;outline:none;transition:all .2s;}
 .search-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(204,204,204,.15);}
 .search-box::before{content:"🔎";position:absolute;left:22px;top:50%;transform:translateY(-50%);font-size:18px;opacity:.4;}
 
-/* FILE LIST */
 .flist{display:flex;flex-direction:column;gap:2px;}
 .frow{border:1px solid var(--border);background:var(--surface);overflow:hidden;transition:all .25s;border-radius:8px;}
 .frow:hover{border-color:var(--accent);box-shadow:0 4px 20px -4px rgba(204,204,204,.15);}
@@ -105,8 +87,7 @@ h1,h2{font-family:'Syne',sans-serif;}
 .fexp-inner{padding:24px 24px 24px 52px;}
 .fdesc{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:300;color:var(--mid);line-height:1.75;margin-bottom:24px;white-space:pre-wrap;}
 
-.dlbtn{display:inline-flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  background:transparent;border:1px solid var(--accent);color:var(--accent);padding:10px 26px;border-radius:9999px;text-decoration:none;transition:all .25s;position:relative;overflow:hidden;}
+.dlbtn{display:inline-flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:transparent;border:1px solid var(--accent);color:var(--accent);padding:10px 26px;border-radius:9999px;text-decoration:none;transition:all .25s;position:relative;overflow:hidden;}
 .dlbtn::before{content:'';position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.16,1,.3,1);}
 .dlbtn span{position:relative;z-index:1;}
 .dlbtn:hover::before{transform:scaleX(1);}
@@ -114,12 +95,10 @@ h1,h2{font-family:'Syne',sans-serif;}
 
 .viewonly{font-family:'JetBrains Mono',monospace;font-size:10px;color:#444;letter-spacing:.2em;text-transform:uppercase;}
 
-/* EMPTY */
 .empty{padding:80px 40px;text-align:center;border:2px dashed #222;color:#222;border-radius:12px;}
 .empty big{font-family:'Syne',sans-serif;font-size:72px;font-weight:800;display:block;color:#111;margin-bottom:12px;letter-spacing:-.04em;}
 .empty p{font-size:10px;letter-spacing:.3em;text-transform:uppercase;}
 
-/* ADMIN */
 #admbtn{position:fixed;bottom:24px;right:24px;z-index:9000;width:42px;height:42px;background:#111;border:2px solid #222;color:#666;font-size:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .3s;}
 #admbtn:hover{background:var(--accent);color:#000;border-color:var(--accent);}
 
@@ -151,7 +130,6 @@ h1,h2{font-family:'Syne',sans-serif;}
 .aerr{font-family:'JetBrains Mono',monospace;font-size:10px;color:#f66;letter-spacing:.2em;margin-top:12px;text-align:center;display:none;}
 .aerr.on{display:block;}
 
-/* NOTIF */
 #notif{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);z-index:99997;background:var(--accent);color:#111;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 32px;border-radius:9999px;opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;box-shadow:0 10px 30px -10px var(--accent);}
 #notif.on{opacity:1;transform:translateX(-50%) translateY(0);}
 
@@ -230,7 +208,7 @@ h1,h2{font-family:'Syne',sans-serif;}
       <select id="ucat"></select>
     </div>
     <div class="fld"><label>File Name / Title</label><input type="text" id="utit" placeholder="e.g. HvH Rage Config v3"/></div>
-    <div class="fld"><label>Description (visible after upload)</label><textarea id="udsc" placeholder="Describe settings, features, notes..."></textarea></div>
+    <div class="fld"><label>Description</label><textarea id="udsc" placeholder="Describe settings, features, notes..."></textarea></div>
     <div class="fld"><label>Tags (comma separated)</label><input type="text" id="utag" placeholder="hvh, rage, nospread"/></div>
     
     <div class="fld"><label>File Attachment</label>
@@ -243,7 +221,6 @@ h1,h2{font-family:'Syne',sans-serif;}
 </div>
 
 <script type="module">
-// ── FIREBASE ─────────────────────────────────────────────
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
@@ -254,24 +231,23 @@ const firebaseConfig = {
   projectId: "qore-707b2",
   storageBucket: "qore-707b2.firebasestorage.app",
   messagingSenderId: "649511949210",
-  appId: "1:649511949210:web:1934ba602511a66d9a2023"
+  appId: "1:649511949210:web:1934ba602511a66d9a2023",
+  measurementId: "G-GTJH2PNSJE"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// ── CONFIG ───────────────────────────────────────────────
-const PASS = 'vaultdrop2025';   // ← Change this to a strong password!
+const PASS = 'qorebaba1212';
 
-// ── STATE ────────────────────────────────────────────────
 let logged = false;
 let cs = 'configs', ck = 'gs';
 let currentSearch = '';
 let currentTagFilter = null;
 let currentUnsubscribe = null;
 
-// ── CURSOR + BACKGROUND ──────────────────────────────────
+// Cursor + Background
 const cur = document.getElementById('cur'), ring = document.getElementById('ring');
 let mx=0, my=0, rx=0, ry=0;
 document.addEventListener('mousemove', e=>{mx=e.clientX; my=e.clientY;});
@@ -285,51 +261,41 @@ class P{constructor(){this.i();}i(){this.x=Math.random()*W;this.y=Math.random()*
 const pts=[];for(let i=0;i<90;i++)pts.push(new P());
 (function tbg(){cx.clearRect(0,0,W,H);pts.forEach((p,i)=>{p.s();p.d();for(let j=i+1;j<pts.length;j++){const dx=p.x-pts[j].x,dy=p.y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<85){cx.globalAlpha=(1-d/85)*.04;cx.strokeStyle='#cccccc';cx.lineWidth=.5;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(pts[j].x,pts[j].y);cx.stroke();}}});requestAnimationFrame(tbg);})();
 
-// ── LABELS ───────────────────────────────────────────────
+// Labels
 const LBL = {
   configs:{gs:'Gamesense', nl:'Neverlose'},
   lua:{gs:'Gamesense', nl:'Neverlose'},
   source:{valorant:'Valorant', cs2:'CS2', r6:'R6 Siege', bo7:'Black Ops 7', apex:'Apex', rust:'Rust', imgui:'ImGui', tools:'Tools'}
 };
 
-// ── NAV TABS ─────────────────────────────────────────────
 function activateTab(s, k) {
   cs = s; ck = k;
   document.querySelectorAll('.ni').forEach(b => b.classList.remove('on'));
-  const activeBtn = Array.from(document.querySelectorAll('.ni')).find(btn => btn.dataset.s === s && btn.dataset.k === k);
-  if (activeBtn) activeBtn.classList.add('on');
+  const active = Array.from(document.querySelectorAll('.ni')).find(btn => btn.dataset.s === s && btn.dataset.k === k);
+  if (active) active.classList.add('on');
   currentSearch = ''; currentTagFilter = null;
   loadItems();
 }
 
-document.querySelectorAll('.ni').forEach(btn => {
-  btn.addEventListener('click', () => activateTab(btn.dataset.s, btn.dataset.k));
-});
+document.querySelectorAll('.ni').forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.s, btn.dataset.k)));
 
-// ── RENDER ───────────────────────────────────────────────
 function renderPanel(items = []) {
   const label = LBL[cs][ck] || ck;
   const isSrc = cs === 'source';
   const type = cs === 'configs' ? 'Config' : cs === 'lua' ? 'Lua Script' : 'Source Code';
 
-  let h = `
-    <div class="phdr">
-      <div><h1><span>// ${type}</span>${label}</h1></div>
-      <div class="search-box">
-        <input type="text" id="global-search" placeholder="Search title, description or tags..." value="${currentSearch}" oninput="handleSearch(this.value)">
-      </div>
-      <div style="background:#1a1a1a;border:1px solid var(--accent);color:var(--accent);padding:6px 16px;border-radius:9999px;font-size:10px;">${items.length} file${items.length===1?'':'s'}</div>
-    </div>
-    <div class="flist">`;
+  let h = `<div class="phdr">
+    <div><h1><span>// ${type}</span>${label}</h1></div>
+    <div class="search-box"><input type="text" id="global-search" placeholder="Search title, description or tags..." value="${currentSearch}" oninput="handleSearch(this.value)"></div>
+    <div style="background:#1a1a1a;border:1px solid var(--accent);color:var(--accent);padding:6px 16px;border-radius:9999px;font-size:10px;">${items.length} file${items.length===1?'':'s'}</div>
+  </div><div class="flist">`;
 
   if (!items.length) {
     h += `<div class="empty"><big>NO MATCHES</big><p>Try different keywords or clear filters</p></div>`;
   } else {
     items.forEach(item => {
       const tags = (item.tags||[]).map(t => `<span class="tpill" onclick="filterByTag('${t}');event.stopImmediatePropagation();">${t}</span>`).join('');
-      const dl = !isSrc 
-        ? `<a class="dlbtn" href="${item.downloadURL||'#'}" download="${item.filename||item.title}"><span>↓ DOWNLOAD</span></a>`
-        : `<span class="viewonly">// VIEW ONLY — NO DOWNLOAD</span>`;
+      const dl = !isSrc ? `<a class="dlbtn" href="${item.downloadURL||'#'}" download="${item.filename||item.title}"><span>↓ DOWNLOAD</span></a>` : `<span class="viewonly">// VIEW ONLY — NO DOWNLOAD</span>`;
 
       h += `<div class="frow" id="r${item.id}">
         <div class="frh">
@@ -358,35 +324,21 @@ function tog(id){
   if (!open) row.classList.add('exp');
 }
 
-function handleSearch(val) {
-  currentSearch = val;
-  loadItems();
-}
+function handleSearch(val) { currentSearch = val; loadItems(); }
+function filterByTag(tag) { currentTagFilter = currentTagFilter === tag ? null : tag; loadItems(); }
 
-function filterByTag(tag) {
-  currentTagFilter = currentTagFilter === tag ? null : tag;
-  loadItems();
-}
-
-// ── FIRESTORE LOAD ───────────────────────────────────────
 function loadItems() {
   if (currentUnsubscribe) currentUnsubscribe();
-
   const colRef = collection(db, `${cs}_${ck}`);
-
   currentUnsubscribe = onSnapshot(colRef, (snapshot) => {
     const items = [];
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      items.push({ id: doc.id, ...data });
-    });
-    // Sort newest first
-    items.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    snapshot.forEach(d => items.push({id: d.id, ...d.data()}));
+    items.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
     renderPanel(items);
   });
 }
 
-// ── ADMIN PANEL ──────────────────────────────────────────
+// Admin
 document.getElementById('admbtn').addEventListener('click', () => {
   document.getElementById('admov').classList.add('on');
   if (logged) showUploadPanel();
@@ -397,9 +349,7 @@ document.getElementById('admbtn').addEventListener('click', () => {
   }
 });
 
-function closeAdm() {
-  document.getElementById('admov').classList.remove('on');
-}
+function closeAdm() { document.getElementById('admov').classList.remove('on'); }
 
 function doLogin() {
   if (document.getElementById('apw').value === PASS) {
@@ -419,7 +369,6 @@ function showUploadPanel() {
   renderRecent();
 }
 
-// Upload, Recent, Delete functions (same as before)
 document.getElementById('usec').addEventListener('change', function() {
   const sel = document.getElementById('ucat'); sel.innerHTML = '';
   const opts = this.value === 'source' 
@@ -460,7 +409,6 @@ async function doUpload() {
   try {
     let downloadURL = null;
     let filename = title;
-
     if (file) {
       filename = file.name;
       const storageRef = ref(storage, `${sec}/${cat}/${Date.now()}_${filename}`);
@@ -468,17 +416,15 @@ async function doUpload() {
       downloadURL = await getDownloadURL(snapshot.ref);
     }
 
-    await addDoc(collection(db, `${sec}_${cat}`), {
-      title, desc, tags, date, timestamp, downloadURL, filename
-    });
+    await addDoc(collection(db, `${sec}_${cat}`), { title, desc, tags, date, timestamp, downloadURL, filename });
 
     notify('✓ Uploaded: ' + title);
-    document.getElementById('utit').value = '';
-    document.getElementById('udsc').value = '';
+    document.getElementById('utit').value = ''; 
+    document.getElementById('udsc').value = ''; 
     document.getElementById('utag').value = '';
-    document.getElementById('ufile').value = '';
+    document.getElementById('ufile').value = ''; 
     document.getElementById('fdlbl').textContent = 'Click or drag & drop file here';
-    renderRecent();
+    renderRecent(); 
     loadItems();
   } catch (err) {
     showUErr('// upload failed');
@@ -494,9 +440,7 @@ function showUErr(m) {
 async function renderRecent() {
   const el = document.getElementById('rlist');
   el.innerHTML = `<div style="font:9px/1 JetBrains Mono,mono;letter-spacing:.3em;color:#222;text-transform:uppercase;margin-bottom:12px;">Recent Uploads</div>`;
-
   const collections = ['configs_gs','configs_nl','lua_gs','lua_nl','source_valorant','source_cs2','source_r6','source_bo7','source_apex','source_rust','source_imgui','source_tools'];
-  
   for (let col of collections) {
     try {
       const snap = await getDocs(query(collection(db, col), orderBy("timestamp", "desc"), limit(3)));
@@ -504,14 +448,10 @@ async function renderRecent() {
         const item = d.data();
         const dEl = document.createElement('div');
         dEl.style = 'display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #111;font-family:JetBrains Mono,monospace;font-size:12px;';
-        dEl.innerHTML = `
-          <span style="flex:1;color:#ccc;">${escHTML(item.title)}</span>
-          <span style="font-size:9px;color:var(--accent);opacity:.7;">${col}</span>
-          <button onclick="delItem('${col}','${d.id}');event.stopImmediatePropagation();" style="background:none;border:none;color:#f66;font-size:18px;cursor:pointer;">×</button>
-        `;
+        dEl.innerHTML = `<span style="flex:1;color:#ccc;">${escHTML(item.title)}</span><span style="font-size:9px;color:var(--accent);opacity:.7;">${col}</span><button onclick="delItem('${col}','${d.id}');event.stopImmediatePropagation();" style="background:none;border:none;color:#f66;font-size:18px;cursor:pointer;">×</button>`;
         el.appendChild(dEl);
       });
-    } catch(e) {}
+    } catch(e){}
   }
 }
 
@@ -519,7 +459,7 @@ async function delItem(colPath, id) {
   if (!logged || !confirm('Delete this item?')) return;
   await deleteDoc(doc(db, colPath, id));
   notify('Deleted');
-  renderRecent();
+  renderRecent(); 
   loadItems();
 }
 
@@ -529,7 +469,6 @@ function notify(m) {
   setTimeout(() => n.classList.remove('on'), 2800);
 }
 
-// Keyboard shortcut
 document.addEventListener('keydown', e => {
   if (e.key === '/' && document.getElementById('global-search')) {
     e.preventDefault();
@@ -537,7 +476,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Initial load
 loadItems();
 </script>
 </body>
